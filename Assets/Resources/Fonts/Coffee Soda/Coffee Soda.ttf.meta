@@ -1,0 +1,22 @@
+fileFormatVersion: 2
+guid: dfa9e3ee082517b4eb66516224d203fa
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontNames:
+  - Coffee Soda
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 1365b43ba66302440ba6ca792a1c4c6e, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -1,0 +1,12 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/Styles/main.uss?fileID=7433441132597879392&amp;guid=8e37d066f00d5b44b8d4fcdade00028e&amp;type=3#main" />
+    <ui:VisualElement name="Root" style="flex-grow: 1; align-items: center; justify-content: center;">
+        <ui:Label text="GAME OVER" display-tooltip-when-elided="true" name="Text" style="flex-grow: 0; flex-shrink: 1; -unity-text-align: middle-center; width: 50%; -unity-font: resource(&apos;Fonts/Coffee Soda/Coffee Soda&apos;); -unity-font-definition: initial; color: rgb(63, 233, 0); font-size: 40%; -unity-text-outline-width: 0.1px; -unity-text-outline-color: rgb(18, 67, 0); text-shadow: 1.2px 0.5px 3.9px rgba(0, 0, 0, 0.86);" />
+        <ui:Label text="Total frogs: 0" display-tooltip-when-elided="true" name="InfoText" style="flex-grow: 0; flex-shrink: 1; -unity-text-align: middle-center; width: 50%; -unity-font: resource(&apos;Fonts/Coffee Soda/Coffee Soda&apos;); -unity-font-definition: initial; color: rgb(255, 203, 0); font-size: 20%; -unity-text-outline-width: 0.1px; -unity-text-outline-color: rgb(18, 67, 0); text-shadow: 1.2px 0.5px 3.9px rgba(0, 0, 0, 0.86);" />
+        <ui:VisualElement name="BtnGroup" style="flex-grow: 0; width: 50%; align-items: center;">
+            <ui:Button text="Retry" display-tooltip-when-elided="true" name="RetryButton" class="button" style="height: 10px;" />
+            <ui:Button text="Main Menu" display-tooltip-when-elided="true" name="MainMenuButton" class="button" />
+            <ui:Button text="Exit" display-tooltip-when-elided="true" name="ExitButton" class="button" style="height: 10px;" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
