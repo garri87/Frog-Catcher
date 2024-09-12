@@ -1,18 +1,13 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Basket : MonoBehaviour
 {
-    private BoxCollider _boxCollider;
     public ParticleSystem particle;
     private GameManager gameManager;
     private PlayerController playerController;
     private void Awake()
     {
-        
-        _boxCollider = GetComponent<BoxCollider>(); 
-
+  
         gameManager = GameManager.Instance;
 
         playerController = GetComponentInParent<PlayerController>();

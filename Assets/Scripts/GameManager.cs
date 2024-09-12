@@ -1,10 +1,7 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
-using Unity.PlasticSCM.Editor.WebApi;
 using UnityEngine;
-using UnityEngine.SocialPlatforms.Impl;
+using UnityEngine.InputSystem;
 
 public class GameManager : MonoBehaviour
 {
@@ -70,6 +67,10 @@ public class GameManager : MonoBehaviour
     }
 
     private bool gameOver;
+    public bool IsGameOver
+    {
+        get { return gameOver; }
+    }
 
     [HideInInspector]
     public int catchedFrogs = 0;
@@ -80,18 +81,24 @@ public class GameManager : MonoBehaviour
 
     private bool matchStarted;
 
-
     private void OnValidate()
     {
         player = GameObject.Find("Player");
         if (player)
         {
             player.transform.position = playerStartPos;
+
         }
     }
 
+
     private void Awake()
     {
+        if (Application.isMobilePlatform)
+        {
+            Application.targetFrameRate = 30;
+        }
+
         uiManager = GameObject.Find("UI").GetComponent<UiManager>();
         player = GameObject.Find("Player");
         if (player)
@@ -128,11 +135,7 @@ public class GameManager : MonoBehaviour
                     GameOver();
                 }
             }
-            if (Input.GetKeyDown(KeyCode.Escape) && !gameOver)
-            {
-                TogglePauseGame();
-            }
-
+            
             if (timer < levelTimer / 2)
             {
                 if (crocodiles != null)
@@ -147,6 +150,8 @@ public class GameManager : MonoBehaviour
                     }
                 }
             }
+
+            uiManager.EnableMobileControls(player.activeSelf);
         }
     }
 
@@ -176,11 +181,12 @@ public class GameManager : MonoBehaviour
             timer = 0;
             Debug.Log("Game Over");
             CheckMaxScore();
-            uiManager.ToggleUI("GameOver", true);
+            
             player.SetActive(false);
 
             gameOver = true;
             matchStarted = false;
+            uiManager.ToggleUI("GameOver", true);
         }
     }
 
@@ -217,6 +223,8 @@ public class GameManager : MonoBehaviour
 
         if (player)
         {
+         
+
             player.transform.position = playerStartPos;
             player.SetActive(true);
         }
@@ -266,28 +274,36 @@ public class GameManager : MonoBehaviour
 
     public void OpenMainMenu()
     {
-        uiManager.ToggleUI("MainMenu",true);
         player.SetActive(false);
         ToggleEntities(frogs,false);
         ToggleEntities(crocodiles,false);
         ToggleEntities(bees,false);
-
+        uiManager.ToggleUI("MainMenu", true);
     }
 
     public void TogglePauseGame()
     {
-        isPaused = !isPaused;
+        if (!gameOver)
+        {
+            isPaused = !isPaused;
 
-        if (isPaused)
-        {
-            uiManager.ToggleUI("GameOver", true);
-            Time.timeScale = 0;
-        } 
-        else
-        {
-            uiManager.ToggleUI("InGameOverlay", true);
-            Time.timeScale = 1;
+            if (isPaused)
+            {
+                uiManager.ToggleUI("GameOver", true);
+                Time.timeScale = 0;
+            }
+            else
+            {
+                uiManager.ToggleUI("InGameOverlay", true);
+                Time.timeScale = 1;
+            }
         }
+    }
+
+    public void PauseGame(InputAction.CallbackContext context)
+    {
+        Debug.Log("Pause Called");
+        TogglePauseGame();
     }
 
     public void QuitGame()
@@ -296,4 +312,10 @@ public class GameManager : MonoBehaviour
         Application.Quit();
     }
 
+    private void OnDrawGizmosSelected()
+    {
+       Vector3 size = new Vector3(mapLimitX, mapLimitY, mapLimitZ)*2;
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawCube(transform.position, size); 
+    }
 }

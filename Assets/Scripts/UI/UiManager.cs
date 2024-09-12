@@ -1,18 +1,21 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 public class UiManager : MonoBehaviour
 {
     public UIDocument[] uiDocuments;
-
+    public Canvas joystickCanvas;
 
     private void Awake()
     {
         if (uiDocuments.Length == 0 )
         {
             uiDocuments = GetComponentsInChildren<UIDocument>(includeInactive:true);
+        }
+
+        if (!joystickCanvas)
+        {
+            joystickCanvas = transform.Find("JoystickCanvas").GetComponent<Canvas>();
         }
     }
 
@@ -25,8 +28,12 @@ public class UiManager : MonoBehaviour
             {
                 uiDocument.gameObject.SetActive(enabled);
             }
-            
         }
+    }
+
+    public void EnableMobileControls(bool enabled = true)
+    {       
+       joystickCanvas.enabled = enabled;
     }
 
 

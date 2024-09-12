@@ -1,9 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerController : EntityBase
 {
+
+    private PlayerControls playerControls;
+    public Vector2 direction;
+
     public int maxMovementSpeed = 5;
     private int currentSpeed;
     [Range(0f,1f)]
@@ -14,7 +20,6 @@ public class PlayerController : EntityBase
     public float verticalInput;
 
     private Rigidbody _rigidbody;
-    private CapsuleCollider _capsuleCollider;
     private MeshRenderer _meshRenderer;
 
     private Vector3 moveDirection;
@@ -33,39 +38,46 @@ public class PlayerController : EntityBase
 
     private GameManager gameManager;
 
+
+    private PlayerInput playerInput;
+
+    private InputAction pauseGameAction;
+
     private void Awake()
     {
+
+        playerControls = new();
+
         gameManager = GameManager.Instance;
+        playerInput = GetComponent<PlayerInput>();
 
     }
+
+    private void OnEnable()
+    {
+        pauseGameAction = playerInput.actions["Pause"];
+        pauseGameAction.started += gameManager.PauseGame;
+        playerControls.Enable();
+    }
+
 
     void Start()
     {
         _rigidbody = GetComponent<Rigidbody>();
-        _capsuleCollider = GetComponent<CapsuleCollider>();
         _meshRenderer = GetComponent<MeshRenderer>();
 
         timer = invulnerableTime;
 
     }
 
-    void Update()
+    void FixedUpdate()
     {
-        if (Input.touchCount > 0)
-        {
-            Touch touch = Input.GetTouch(0);
-            Vector2 touchPosition = touch.position;
+        direction = playerControls.PlayerActions.Movement.ReadValue<Vector2>();
 
-            // Convertir la posición del toque en una dirección de movimiento
-            moveDirection = new Vector3(touchPosition.x - Screen.width / 2, 0, touchPosition.y - Screen.height / 2).normalized;
-        }
-        else
-        {
-            horizontalInput = Input.GetAxis("Horizontal");
-            verticalInput = Input.GetAxis("Vertical");
+        horizontalInput = playerControls.PlayerActions.Movement.ReadValue<Vector2>().x;
+        verticalInput = playerControls.PlayerActions.Movement.ReadValue<Vector2>().y;
 
-            moveDirection = new Vector3(horizontalInput, 0, verticalInput).normalized;
-        }
+        moveDirection = new Vector3(horizontalInput, 0, verticalInput);
 
         if (moveDirection != Vector3.zero)
         {
@@ -73,6 +85,18 @@ public class PlayerController : EntityBase
             transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, turnSpeed * Time.deltaTime);
         }
 
+
+        Vector3 movement = moveDirection * maxMovementSpeed * Time.fixedDeltaTime;
+
+        _rigidbody.MovePosition(_rigidbody.position + movement);
+
+        LimitBounds(transform, gameManager.mapLimitX, gameManager.mapLimitY, gameManager.mapLimitZ);
+
+    }
+
+
+    void Update()
+    {
 
         if (isInvulnerable)
         {
@@ -90,21 +114,38 @@ public class PlayerController : EntityBase
 
     }
 
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Bee"))
+        {
+            if (!isInvulnerable)
+            {
+                PushBack(this.gameObject, transform.position + Vector3.back, pushForce);
+                Debug.Log("Player touched by Bee");
+                LoseFrogs(50f);
+                isInvulnerable = true;
+            }
+        }
+
+        if (collision.gameObject.CompareTag("Crocodile"))
+        {
+            gameManager.GameOver();
+        }
+    }
+
+    private void OnDisable()
+    {
+        pauseGameAction.started -= gameManager.PauseGame;
+        playerControls.Disable();
+
+    }
+
     public IEnumerator blinkRenderer()
     {
         _meshRenderer.enabled = !_meshRenderer.enabled;
         yield return new WaitForSeconds(0.5f);
     }
-
-    void FixedUpdate()
-    {
-        LimitBounds(transform, gameManager.mapLimitX, gameManager.mapLimitY, gameManager.mapLimitZ);
-
-        Vector3 movement = moveDirection * maxMovementSpeed * Time.fixedDeltaTime;
-        _rigidbody.MovePosition(_rigidbody.position + movement);
-    }
-
-
+    
     private void LoseFrogs(float percentaje)
     {
         int catchedFrogs = gameManager.catchedFrogs;
@@ -127,23 +168,6 @@ public class PlayerController : EntityBase
         }
     }
 
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.CompareTag("Bee"))
-        {
-            if (!isInvulnerable)
-            {
-                PushBack(this.gameObject, transform.position + Vector3.back, pushForce);
-                Debug.Log("Player touched by Bee");
-                LoseFrogs(50f);
-                isInvulnerable = true;
-            }
-        }
-
-        if (collision.gameObject.CompareTag("Crocodile"))
-        {
-            gameManager.GameOver();
-        }
-    }
+    
 
 }

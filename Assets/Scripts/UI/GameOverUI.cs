@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -32,7 +30,20 @@ public class GameOverUI : MonoBehaviour
         _exitButton = root.Q<Button>("ExitButton");
         _infoTextLabel = root.Q<Label>("InfoText");
 
-        _retryButton.RegisterCallback<ClickEvent>(evt => gameManager.StartGame(gameManager.level) );
+        Debug.Log($"Game Over state: {gameManager.IsGameOver}");
+
+        if (gameManager.IsGameOver)
+        {
+            _retryButton.text = "Retry";
+            _retryButton.UnregisterCallback<ClickEvent>(evt => gameManager.TogglePauseGame());
+            _retryButton.RegisterCallback<ClickEvent>(evt => gameManager.StartGame(gameManager.level));
+        }
+        else
+        {
+            _retryButton.text = "Continue";
+            _retryButton.UnregisterCallback<ClickEvent>(evt => gameManager.StartGame(gameManager.level));
+            _retryButton.RegisterCallback<ClickEvent>(evt => gameManager.TogglePauseGame());
+        }
         _mainMenuButton.RegisterCallback<ClickEvent>(evt => gameManager.OpenMainMenu());
         _exitButton.RegisterCallback<ClickEvent>(evt => gameManager.QuitGame());
 

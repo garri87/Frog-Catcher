@@ -4,7 +4,6 @@
     width: 50%;
     height: auto;
     font-size: 70%;
-    background-color: rgb(255, 113, 0);
     color: rgb(255, 255, 255);
     -unity-font-style: normal;
     border-top-left-radius: 5px;
@@ -20,4 +19,6 @@
     -unity-text-outline-width: 0.1px;
     -unity-text-outline-color: rgb(0, 0, 0);
     text-shadow: 0.9px 1.1px 0.5px rgba(0, 0, 0, 0.6);
+    background-image: resource('Textures/wood');
+    -unity-background-image-tint-color: rgba(207, 193, 95, 255);
 }
