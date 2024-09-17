@@ -91,7 +91,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-
     private void Awake()
     {
         if (Application.isMobilePlatform)
@@ -121,7 +120,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (matchStarted)

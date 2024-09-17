@@ -2,22 +2,35 @@ using UnityEngine;
 
 public class FrogController : EntityBase
 {
-    public float jumpForce = 5f;          
+    [Header("Jump Attributes")]
+    public float jumpForce = 5f;
+    public float jumpAngle = 70f;
+    public float jumpHeight = 10f;
+
+    private Vector3 jumpDirection;
+
+    private Quaternion toRotation;
     public float maxJumpInterval = 2f;
     private float jumpInterval;
-    public float jumpHeight = 10f;        
-    public float forwardMultiplier = 1.5f;
+        
+    [Header("Movement")]
+    public float turnSpeed = 500f;
 
     private Rigidbody rb;
     private bool isGrounded;
+
     public bool IsGrounded
     {
         get { return isGrounded; }
     }
     private float timeSinceLastJump;
-   
 
+    [SerializeField]
     private bool canJump;
+
+    public bool frogCollision;
+    public bool playerCollision;
+
 
     private GameManager gameManager;
 
@@ -39,34 +52,28 @@ public class FrogController : EntityBase
 
     private void FixedUpdate()
     {
-
         LimitBounds(transform,gameManager.mapLimitX,gameManager.mapLimitY,gameManager.mapLimitZ);
 
+        //Limit rigidbody Y velocity if is out of bounds
         if(transform.position.y >= gameManager.mapLimitY)
         {
             rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
         }
 
+        //Rotate towards the next jump position
+        toRotation = Quaternion.LookRotation(jumpDirection, Vector3.up);
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, turnSpeed * Time.deltaTime);
+
         if (canJump)
         {
-            // Generar una dirección de salto aleatoria con un ángulo fijo de 80°
-            float randomAngle = Random.Range(0f, 360f); // Ángulo aleatorio alrededor del eje Y
-            Vector3 jumpDirection = Quaternion.Euler(0, randomAngle, 0) * Vector3.forward;
-
-            // Rotar la rana hacia la dirección del salto
-            transform.rotation = Quaternion.LookRotation(jumpDirection);
-
-            Jump(jumpDirection);
+            Jump();
         }
-
     }
 
+    
 
     void Update()
     {
-
-
-
         if (isGrounded)
         {           
             timeSinceLastJump += Time.deltaTime;
@@ -81,20 +88,39 @@ public class FrogController : EntityBase
    
         }
 
-
-
-
     }
 
-    void Jump(Vector3 direction)
+    void Jump()
     {
-        Vector3 jumpVector = direction * jumpForce * forwardMultiplier;
+        float angleInRad = jumpAngle * Mathf.Deg2Rad;
 
-        jumpVector.y = jumpHeight;
+        float randomRot = Random.Range(0f, 360f);
+            
+        jumpDirection = Quaternion.Euler(0, randomRot, 0) * Vector3.forward;
+
+        Vector3 jumpVector = new Vector3(jumpDirection.x * Mathf.Cos(angleInRad),
+                                         Mathf.Sin(angleInRad), jumpDirection.z * Mathf.Cos(angleInRad)) * jumpForce;
 
         rb.AddForce(jumpVector, ForceMode.Impulse);
 
         canJump = false;
+        jumpInterval = Random.Range(1, maxJumpInterval);
+
+    }
+
+
+    private bool IsOutOfBounds(Vector3 position)
+    {
+        // Comprobar si la posición supera los límites definidos en el GameManager
+        if (position.x < -gameManager.mapLimitX
+            || position.x > gameManager.mapLimitX
+            || position.z < -gameManager.mapLimitZ
+            || position.z > gameManager.mapLimitZ)
+        {
+            return false;
+        }
+
+        return true;
     }
 
     void OnCollisionEnter(Collision collision)
@@ -102,8 +128,6 @@ public class FrogController : EntityBase
         if (collision.gameObject.CompareTag("Ground"))
         {
             isGrounded = true;
-            jumpInterval = Random.Range(0, maxJumpInterval);
-
         }
 
         if(collision.gameObject.CompareTag("Player") 
@@ -111,6 +135,27 @@ public class FrogController : EntityBase
         {
             canJump = true;
         }
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            playerCollision= true;
+        }
+        else
+        {
+            playerCollision = false;
+
+        }
+
+
+        if (collision.gameObject.CompareTag("Frog"))
+        {
+            frogCollision = true;
+        }
+        else
+        {
+            frogCollision = false;
+        }
+
+
     }
 
     void OnCollisionExit(Collision collision)

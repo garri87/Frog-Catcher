@@ -3,18 +3,18 @@ using UnityEngine.AI;
 
 public class EntityBase : MonoBehaviour
 {
-    protected void LimitBounds(Transform target, float maxX, float maxY, float maxZ)
+    protected void LimitBounds(Transform target,float maxX, float maxY, float maxZ)
     {
         //Debug.Log($"Limits X:{maxX} Y:{maxY} Z:{maxZ}");
 
-
         float clampedX = Mathf.Clamp(target.position.x, -maxX, maxX);
         float clampedZ = Mathf.Clamp(target.position.z, -maxZ, maxZ);
-        float clampedY = Mathf.Clamp(target.position.y, 0, maxY);
+        float clampedY = Mathf.Clamp(target.position.y, -1, maxY);
 
         if (target.position.x != clampedX || target.position.z != clampedZ)
         {
             target.position = new Vector3(clampedX, clampedY, clampedZ);
+          
         }
     }
 

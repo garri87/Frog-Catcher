@@ -261,7 +261,7 @@ BoxCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6994997482038038912}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: ba65670637ae410459851accc4461839, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
@@ -281,7 +281,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 112
+  m_Constraints: 80
   m_CollisionDetection: 1
 --- !u!114 &2586508638591012271
 MonoBehaviour:
@@ -295,7 +295,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dffcb80761f1c304f8100ff11f7d5ad1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  jumpForce: 20
-  jumpInterval: 2
+  jumpForce: 30
+  jumpAngle: 80
   jumpHeight: 20
-  forwardMultiplier: 0.5
+  maxJumpInterval: 2
+  turnSpeed: 500
+  canJump: 0
+  frogCollision: 0
+  playerCollision: 0

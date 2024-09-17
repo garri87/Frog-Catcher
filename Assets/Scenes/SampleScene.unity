@@ -1060,7 +1060,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 446b841f49f6d0b4d9ba03f548d98686, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  frogCount: 50
+  frogCount: 20
   crocodiles:
   - {fileID: 1499659534}
   bees:
@@ -1168,6 +1168,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 255745382382278452, guid: 506cebb43bd82ca4e89d336417c73322, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 7a0daa38fcc05e7459e8757923f84fa3, type: 2}
     - target: {fileID: 3029066572425601362, guid: 506cebb43bd82ca4e89d336417c73322, type: 3}
       propertyPath: joystick
       value: 
@@ -1222,6 +1226,26 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3029066572425601367, guid: 506cebb43bd82ca4e89d336417c73322, type: 3}
       propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5715103549003143574, guid: 506cebb43bd82ca4e89d336417c73322, type: 3}
+      propertyPath: InitialModule.startColor.minMaxState
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5715103549003143574, guid: 506cebb43bd82ca4e89d336417c73322, type: 3}
+      propertyPath: InitialModule.startColor.maxGradient.ctime0
+      value: 33153
+      objectReference: {fileID: 0}
+    - target: {fileID: 5715103549003143574, guid: 506cebb43bd82ca4e89d336417c73322, type: 3}
+      propertyPath: InitialModule.startColor.maxGradient.key1.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5715103549003143574, guid: 506cebb43bd82ca4e89d336417c73322, type: 3}
+      propertyPath: InitialModule.startColor.maxGradient.key1.g
+      value: 0.9371229
+      objectReference: {fileID: 0}
+    - target: {fileID: 5715103549003143574, guid: 506cebb43bd82ca4e89d336417c73322, type: 3}
+      propertyPath: InitialModule.startColor.maxGradient.key1.r
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
