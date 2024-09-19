@@ -6,19 +6,54 @@
     font-size: 70%;
     color: rgb(255, 255, 255);
     -unity-font-style: normal;
-    border-top-left-radius: 5px;
-    border-bottom-left-radius: 5px;
-    border-top-right-radius: 5px;
-    border-bottom-right-radius: 5px;
-    border-left-color: rgb(156, 45, 0);
-    border-right-color: rgb(156, 45, 0);
-    border-top-color: rgb(156, 45, 0);
-    border-bottom-color: rgb(156, 45, 0);
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+    border-left-color: rgb(48, 16, 2);
+    border-right-color: rgb(48, 16, 2);
+    border-top-color: rgb(48, 16, 2);
+    border-bottom-color: rgb(48, 16, 2);
     -unity-font-definition: initial;
     -unity-font: resource('Fonts/Coffee Soda/Coffee Soda');
     -unity-text-outline-width: 0.1px;
     -unity-text-outline-color: rgb(0, 0, 0);
     text-shadow: 0.9px 1.1px 0.5px rgba(0, 0, 0, 0.6);
     background-image: resource('Textures/wood');
-    -unity-background-image-tint-color: rgba(207, 193, 95, 255);
+    -unity-background-image-tint-color: rgb(207, 193, 95);
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+}
+
+.tutorialGroup {
+    flex-direction: row;
+    flex-grow: 1;
+    justify-content: center;
+    align-items: center;
+}
+
+.tutorialGroup VisualElement {
+    background-color: rgba(255, 255, 255, 0);
+    flex-grow: 1;
+    max-width: 60px;
+    max-height: 60px;
+    min-width: 10px;
+    min-height: 10px;
+    height: 100%;
+}
+
+.tutorialGroup Label {
+    flex-grow: 1;
+    -unity-font: resource('Fonts/Coffee Soda/Coffee Soda');
+    -unity-font-definition: initial;
+    color: rgba(255, 255, 255, 255);
+    -unity-text-outline-width: 0.01px;
+    -unity-text-outline-color: rgba(0, 0, 0, 255);
+    -unity-text-align: middle-left;
+    white-space: normal;
+    align-items: stretch;
+    font-size: 100%;
+    max-width: 300px;
 }
