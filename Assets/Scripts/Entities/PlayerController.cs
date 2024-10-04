@@ -6,43 +6,51 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : EntityBase
 {
+    [HideInInspector]
+    public float horizontalInput;
+    public float verticalInput;
 
     private PlayerControls playerControls;
     public Vector2 direction;
-
     public int maxMovementSpeed = 5;
     private int currentSpeed;
+
     [Range(0f,1f)]
     public float movementAcceleration = 0.2f;
-    public float turnSpeed = 500f;
 
-    public float horizontalInput;
-    public float verticalInput;
+    public float turnSpeed = 500f;
+    private Vector3 moveDirection;
 
     private Rigidbody _rigidbody;
     private MeshRenderer _meshRenderer;
 
-    private Vector3 moveDirection;
+    private PlayerInput playerInput;
+    private InputAction pauseGameAction;
+
+    private GameManager gameManager;
+
 
     private bool isInvulnerable;
     public bool IsInvulnerable
     {
         get { return isInvulnerable; }
     }
-
     float invulnerableTime = 3f;
-    float timer = 0f;
+    float invulnerableTimer = 0f;
 
     public float pushForce = 5f;
 
+    [Range(0.1f, 4f)]
+    public float powerUpMultiplier = 2f;
 
-    private GameManager gameManager;
+    [Range(1f,10f)]
+    public float powerUpTime = 5f;
 
+    private bool powerUpActive;
 
-    private PlayerInput playerInput;
-
-    private InputAction pauseGameAction;
-
+    private Transform modelTransform;
+    private Transform modelPlaceholder;
+    private Transform basketTransform;
     private void Awake()
     {
 
@@ -50,6 +58,18 @@ public class PlayerController : EntityBase
 
         gameManager = GameManager.Instance;
         playerInput = GetComponent<PlayerInput>();
+
+        modelTransform = transform.Find("Model");
+        if (modelTransform)
+        {
+            basketTransform = transform.Find("Basket");
+            if (basketTransform)
+            {
+                modelPlaceholder = basketTransform.Find("ModelPlaceholder");
+            }
+        }
+
+      
 
     }
 
@@ -64,9 +84,9 @@ public class PlayerController : EntityBase
     void Start()
     {
         _rigidbody = GetComponent<Rigidbody>();
-        _meshRenderer = GetComponent<MeshRenderer>();
+        _meshRenderer = modelTransform.GetComponent<MeshRenderer>();
 
-        timer = invulnerableTime;
+        invulnerableTimer = invulnerableTime;
 
     }
 
@@ -85,7 +105,6 @@ public class PlayerController : EntityBase
             transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, turnSpeed * Time.deltaTime);
         }
 
-
         Vector3 movement = moveDirection * maxMovementSpeed * Time.fixedDeltaTime;
 
         _rigidbody.MovePosition(_rigidbody.position + movement);
@@ -98,20 +117,55 @@ public class PlayerController : EntityBase
     void Update()
     {
 
+        if (modelPlaceholder && modelTransform)
+        {
+            modelTransform.position = modelPlaceholder.position;
+        }
+
         if (isInvulnerable)
         {
-            timer -= Time.deltaTime;
+            invulnerableTimer -= Time.deltaTime;
 
             StartCoroutine("blinkRenderer");
 
-            if (timer <= 0)
+            if (invulnerableTimer <= 0)
             {
                 isInvulnerable = false;
                 _meshRenderer.enabled = true;
-                timer = invulnerableTime;
+                invulnerableTimer = invulnerableTime;
             }
         }
 
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("PowerUp") && powerUpActive == false)
+        {
+            if (!powerUpActive)
+            {
+                StartCoroutine(PowerUpBasket(basketTransform, powerUpMultiplier, powerUpTime));
+
+            }
+        }
+    }
+
+    public IEnumerator PowerUpBasket(Transform basket, float multiplier, float time)
+    {
+        powerUpActive = true;
+
+        Vector3 originalScale = basket.localScale;
+
+        basket.localScale = new Vector3(
+            x: basket.localScale.x * multiplier,
+            y: basket.localScale.y,
+            z: basket.localScale.z * multiplier);
+
+        yield return new WaitForSeconds(time);
+        powerUpActive = false;
+        basket.localScale = originalScale;
+
+        yield return null;
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -131,8 +185,11 @@ public class PlayerController : EntityBase
         {
             gameManager.GameOver();
         }
+
+        
     }
 
+  
     private void OnDisable()
     {
         pauseGameAction.started -= gameManager.PauseGame;
@@ -145,6 +202,7 @@ public class PlayerController : EntityBase
         _meshRenderer.enabled = !_meshRenderer.enabled;
         yield return new WaitForSeconds(0.5f);
     }
+    
     
     private void LoseFrogs(float percentaje)
     {

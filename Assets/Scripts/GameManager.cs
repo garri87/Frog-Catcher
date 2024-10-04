@@ -41,6 +41,7 @@ public class GameManager : MonoBehaviour
     private GameObject player;
 
     public GameObject frogPrefab;
+    public GameObject powerUpPrefab;
 
     public float minSpawnDistance = 5f;  // Distancia mínima desde el jugador
     public float maxSpawnDistance = 10f; // Distancia máxima desde el jugador
@@ -56,6 +57,11 @@ public class GameManager : MonoBehaviour
     public float mapLimitY = 20f;
 
     private int maxScore = 0;
+
+    public float minPowerUpSpawnRate = 5f;
+    public float maxPowerUpSpawnRate = 10f;
+    private float powerUpSpawnTimer;
+
     public int MaxScore
     {
         get { return maxScore; }
@@ -138,16 +144,24 @@ public class GameManager : MonoBehaviour
             {
                 if (crocodiles != null)
                 {
-                    ToggleEntities(crocodiles,true);
-                }
-                else
-                {
-                    foreach (var croc in crocodiles)
-                    {
-                        croc.SetActive(false);
-                    }
+                    EnableEntities(crocodiles,true);
                 }
             }
+
+            if (!powerUpPrefab.activeSelf)
+            {
+                powerUpSpawnTimer -= Time.deltaTime;
+            }
+
+            if (powerUpSpawnTimer < 0)
+            {
+                float randomX = Random.Range(-mapLimitX, mapLimitX);
+                float randomY = Random.Range(-mapLimitY, mapLimitY);
+                powerUpPrefab.transform.position = new Vector3(randomX,powerUpPrefab.transform.position.y,randomY);
+                powerUpPrefab.SetActive(true);
+                powerUpSpawnTimer = Random.Range(minPowerUpSpawnRate,maxPowerUpSpawnRate);
+            }
+
 
             uiManager.EnableMobileControls(player.activeSelf);
         }
@@ -181,7 +195,7 @@ public class GameManager : MonoBehaviour
             CheckMaxScore();
             
             player.SetActive(false);
-
+            powerUpPrefab.SetActive(false);
             gameOver = true;
             matchStarted = false;
             uiManager.ToggleUI("GameOver", true);
@@ -202,6 +216,10 @@ public class GameManager : MonoBehaviour
         }
 
         timer = levelTimer + 0.9f;
+        
+        powerUpSpawnTimer = maxPowerUpSpawnRate;
+        powerUpPrefab.SetActive(false);
+
         catchedFrogs = 0;
 
         frogs = GameObject.FindGameObjectsWithTag("Frog").ToList();
@@ -215,9 +233,9 @@ public class GameManager : MonoBehaviour
             }
 
         }
-        ToggleEntities(frogs,false);
-        ToggleEntities(bees, false);
-        ToggleEntities(crocodiles, false);
+        EnableEntities(frogs,false);
+        EnableEntities(bees, false);
+        EnableEntities(crocodiles, false);
 
         if (player)
         {
@@ -227,14 +245,15 @@ public class GameManager : MonoBehaviour
             player.SetActive(true);
         }
 
-        ToggleEntities(bees,true);
-        ToggleEntities(frogs,true);
+        EnableEntities(bees,true);
+        EnableEntities(frogs,true);
 
 
         matchStarted = true;
     }
 
-    private void ToggleEntities(List<GameObject> entities, bool active)
+
+    private void EnableEntities(List<GameObject> entities, bool active)
     {
         if (entities != null)
         {
@@ -273,9 +292,9 @@ public class GameManager : MonoBehaviour
     public void OpenMainMenu()
     {
         player.SetActive(false);
-        ToggleEntities(frogs,false);
-        ToggleEntities(crocodiles,false);
-        ToggleEntities(bees,false);
+        EnableEntities(frogs,false);
+        EnableEntities(crocodiles,false);
+        EnableEntities(bees,false);
         uiManager.ToggleUI("MainMenu", true);
     }
 

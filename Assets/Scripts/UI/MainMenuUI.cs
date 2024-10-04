@@ -10,10 +10,12 @@ public class MainMenuUI : MonoBehaviour
     private Label maxScoreLabel;
 
     private GameManager gameManager;
+    private UiManager uiManager;
 
     private void Awake()
     {
         gameManager = GameManager.Instance;
+        uiManager = GameObject.FindObjectOfType<UiManager>();
     }
     private void OnEnable()
     {
@@ -26,7 +28,7 @@ public class MainMenuUI : MonoBehaviour
         exitGameButton = root.Q<Button>("ExitButton");
         maxScoreLabel = root.Q<Label>("MaxScoreLabel");
 
-        startGameButton.RegisterCallback<ClickEvent>(evt => gameManager.StartGame(gameManager.level));
+        startGameButton.RegisterCallback<ClickEvent>( evt => ShowTutorial());
         exitGameButton.RegisterCallback<ClickEvent>(evt => gameManager.QuitGame());
 
         UpdateMaxScoreLabel();
@@ -36,5 +38,17 @@ public class MainMenuUI : MonoBehaviour
     private void UpdateMaxScoreLabel()
     {
       maxScoreLabel.text = $"Max Score: {PlayerPrefs.GetInt("MaxScore",0)}"; 
+    }
+
+    private void ShowTutorial()
+    {
+        if (uiManager)
+        {
+            uiManager.ToggleUI("Tutorial",true);
+        }
+        else
+        {
+            Debug.Log("No UI Manager Found");
+        }
     }
 }
