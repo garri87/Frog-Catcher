@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 435690009869150313}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: -0.39, z: 1.58}
-  m_LocalScale: {x: 2.5, y: 0.48, z: 2.5}
+  m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2164631943711915133}
@@ -210,7 +210,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2129000581240920978}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.1476, z: 1.58}
+  m_LocalPosition: {x: 0, y: 0.6, z: 1.58}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5064,6 +5064,7 @@ MonoBehaviour:
   pushForce: 5
   powerUpMultiplier: 2
   powerUpTime: 5
+  basketOriginalScale: {x: 0, y: 0, z: 0}
 --- !u!114 &891923427
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5248,8 +5249,8 @@ GameObject:
   - component: {fileID: 4048634956565069700}
   - component: {fileID: 3237619110218885601}
   - component: {fileID: 1393328399596561213}
-  - component: {fileID: 5148133622579192494}
   - component: {fileID: 1440995239}
+  - component: {fileID: 6217552691774144039}
   m_Layer: 0
   m_Name: Detector
   m_TagString: Basket
@@ -5265,7 +5266,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5099819300878135712}
   m_LocalRotation: {x: -0, y: -1, z: -0, w: 0}
-  m_LocalPosition: {x: 0, y: 1.2, z: 0}
+  m_LocalPosition: {x: 0, y: 1.07, z: 0}
   m_LocalScale: {x: 0.7, y: 0.1, z: 0.7}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5300,7 +5301,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10756, guid: 0000000000000000e000000000000000, type: 0}
+  - {fileID: 2100000, guid: a6ec211138ac0e648a93a498b122aa0f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -5322,19 +5323,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &5148133622579192494
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5099819300878135712}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.7, y: 1, z: 0.7}
-  m_Center: {x: 0.00000005960464, y: 0.0000019073486, z: -0.00000008940696}
 --- !u!114 &1440995239
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5350,3 +5338,17 @@ MonoBehaviour:
   particle: {fileID: 5715103549003143574}
   basketSize: 1
   growSpeed: 1
+--- !u!64 &6217552691774144039
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5099819300878135712}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}

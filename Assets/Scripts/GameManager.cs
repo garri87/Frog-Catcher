@@ -42,6 +42,7 @@ public class GameManager : MonoBehaviour
 
     public GameObject frogPrefab;
     public GameObject powerUpPrefab;
+    public GameObject powerUpGO;
 
     public float minSpawnDistance = 5f;  // Distancia mínima desde el jugador
     public float maxSpawnDistance = 10f; // Distancia máxima desde el jugador
@@ -124,6 +125,8 @@ public class GameManager : MonoBehaviour
         {
             uiManager.ToggleUI("MainMenu", true);
         }
+        powerUpGO = Instantiate(powerUpPrefab,transform.position,transform.rotation);
+        powerUpGO.SetActive(false);
     }
 
     void Update()
@@ -151,15 +154,16 @@ public class GameManager : MonoBehaviour
             if (!powerUpPrefab.activeSelf)
             {
                 powerUpSpawnTimer -= Time.deltaTime;
-            }
+            
 
-            if (powerUpSpawnTimer < 0)
-            {
-                float randomX = Random.Range(-mapLimitX, mapLimitX);
-                float randomY = Random.Range(-mapLimitY, mapLimitY);
-                powerUpPrefab.transform.position = new Vector3(randomX,powerUpPrefab.transform.position.y,randomY);
-                powerUpPrefab.SetActive(true);
-                powerUpSpawnTimer = Random.Range(minPowerUpSpawnRate,maxPowerUpSpawnRate);
+                if (powerUpSpawnTimer < 0)
+                {
+                    float randomX = Random.Range(-mapLimitX, mapLimitX);
+                    float randomY = Random.Range(-mapLimitY, mapLimitY);
+                    powerUpGO.transform.position = new Vector3(randomX, powerUpGO.transform.position.y,randomY);
+                    powerUpSpawnTimer = Random.Range(minPowerUpSpawnRate, maxPowerUpSpawnRate);
+                    powerUpGO.SetActive(true);
+                }
             }
 
 

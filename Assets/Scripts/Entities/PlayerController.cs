@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using UnityEditor.VersionControl;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -51,6 +52,24 @@ public class PlayerController : EntityBase
     private Transform modelTransform;
     private Transform modelPlaceholder;
     private Transform basketTransform;
+
+    public Vector3 basketOriginalScale;
+
+    private void OnValidate()
+    {
+        modelTransform = transform.Find("Model");
+
+        if (modelTransform)
+        {
+            basketTransform = transform.Find("Basket");
+            if (basketTransform)
+            {
+                modelPlaceholder = basketTransform.Find("ModelPlaceholder");
+                basketTransform.localScale = basketOriginalScale;
+            }
+        }
+    }
+
     private void Awake()
     {
 
@@ -59,15 +78,7 @@ public class PlayerController : EntityBase
         gameManager = GameManager.Instance;
         playerInput = GetComponent<PlayerInput>();
 
-        modelTransform = transform.Find("Model");
-        if (modelTransform)
-        {
-            basketTransform = transform.Find("Basket");
-            if (basketTransform)
-            {
-                modelPlaceholder = basketTransform.Find("ModelPlaceholder");
-            }
-        }
+        
 
       
 
@@ -78,6 +89,8 @@ public class PlayerController : EntityBase
         pauseGameAction = playerInput.actions["Pause"];
         pauseGameAction.started += gameManager.PauseGame;
         playerControls.Enable();
+        powerUpActive = false;
+        basketTransform.localScale = basketOriginalScale;
     }
 
 
@@ -144,6 +157,7 @@ public class PlayerController : EntityBase
         {
             if (!powerUpActive)
             {
+                other.gameObject.SetActive(false);
                 StartCoroutine(PowerUpBasket(basketTransform, powerUpMultiplier, powerUpTime));
 
             }
@@ -154,8 +168,6 @@ public class PlayerController : EntityBase
     {
         powerUpActive = true;
 
-        Vector3 originalScale = basket.localScale;
-
         basket.localScale = new Vector3(
             x: basket.localScale.x * multiplier,
             y: basket.localScale.y,
@@ -163,7 +175,7 @@ public class PlayerController : EntityBase
 
         yield return new WaitForSeconds(time);
         powerUpActive = false;
-        basket.localScale = originalScale;
+        basket.localScale = basketOriginalScale;
 
         yield return null;
     }
