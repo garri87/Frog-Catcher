@@ -197,7 +197,7 @@ Transform:
   m_GameObject: {fileID: 6994997482038038912}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -5.1, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.4, y: 0.4, z: 0.4}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6044874070599553529}
@@ -266,8 +266,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 1, y: 1.1296223, z: 2.6733062}
+  m_Center: {x: 0, y: 0.06481117, z: 0.035351664}
 --- !u!54 &1749019832939809301
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -299,7 +299,7 @@ MonoBehaviour:
   jumpForce: 20
   jumpAngle: 80
   jumpHeight: 20
-  maxJumpInterval: 2
+  maxJumpInterval: 5
   turnSpeed: 500
   canJump: 0
   frogCollision: 0

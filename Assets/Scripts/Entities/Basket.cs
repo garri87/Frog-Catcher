@@ -29,20 +29,19 @@ public class Basket : MonoBehaviour
             FrogController frogController = other.GetComponent<FrogController>();
             if(!frogController.IsGrounded && !playerController.IsInvulnerable)
             {
-                if(other.transform.position.y > transform.position.y+0.05f)
-                {
-                    other.gameObject.SetActive(false);
-                    particle.Play();
-                    gameManager.catchedFrogs += 1;
-                }
-               
+                CatchEvent(other.gameObject);
             }    
         }
 
      
     }
 
-
+    private void CatchEvent(GameObject target)
+    {
+        target.SetActive(false);
+        particle.Play();
+        gameManager.catchedFrogs += 1;
+    }
 
 
 

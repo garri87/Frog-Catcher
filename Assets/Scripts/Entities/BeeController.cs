@@ -12,6 +12,11 @@ public class BeeController : EntityBase
 
     private GameManager gameManager;
 
+    public GameObject wingsGO;
+
+    private Quaternion[] wingRots;
+
+
     private void Awake()
     {
         gameManager = GameManager.Instance;
@@ -22,6 +27,11 @@ public class BeeController : EntityBase
     {
         navMeshAgent = GetComponent<NavMeshAgent>();
         navMeshAgent.speed= movementSpeed;
+        wingRots = new Quaternion[wingsGO.transform.childCount];
+        for (int i = 0; i < wingsGO.transform.childCount; i++)
+        {
+            wingRots[i] = wingsGO.transform.GetChild(i).localRotation;
+        }
     }
 
     void Update()
@@ -29,6 +39,7 @@ public class BeeController : EntityBase
         if (navMeshAgent)
         {
             SetPatrolPoint(navMeshAgent,gameManager.mapLimitX,gameManager.mapLimitZ);
+            AnimateWings(movementSpeed * 5);
         }
     }
 
@@ -38,6 +49,20 @@ public class BeeController : EntityBase
     }
 
 
+    private void AnimateWings(float speed)
+    {
+
+        for (int i = 0; i < wingsGO.transform.childCount; i++)
+        {
+            Transform wing = wingsGO.transform.GetChild(i);
+
+            float t = (Mathf.Sin(Time.time * speed) + 1f) / 2f;
+            float angle = Mathf.Lerp(0, 60, t);
+
+            wing.localRotation = wingRots[i] * Quaternion.AngleAxis(angle, Vector3.forward);
+
+        }
+    }
 
     
 }

@@ -45,6 +45,7 @@ public class CrocodileController : EntityBase
         {
             ChaseTarget(navMeshAgent,playerTransform.position);
         }
+
     }
 
     private void OnCollisionEnter(Collision collision)

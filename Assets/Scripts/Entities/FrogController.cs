@@ -26,7 +26,8 @@ public class FrogController : EntityBase
     private float timeSinceLastJump;
 
     [SerializeField]
-    private bool canJump;
+    private bool canJump, catchable;
+ 
 
     public bool frogCollision;
     public bool playerCollision;
@@ -128,6 +129,7 @@ public class FrogController : EntityBase
         if (collision.gameObject.CompareTag("Ground"))
         {
             isGrounded = true;
+            catchable = false;
         }
 
         if(collision.gameObject.CompareTag("Player") 
@@ -155,7 +157,10 @@ public class FrogController : EntityBase
             frogCollision = false;
         }
 
-
+        if (collision.gameObject.CompareTag("Basket"))
+        {
+            catchable = true;
+        }
     }
 
     void OnCollisionExit(Collision collision)

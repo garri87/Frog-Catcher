@@ -50,7 +50,7 @@ public class GameManager : MonoBehaviour
     public float levelTimer = 60f;
     private float timer;
 
-    public Vector3 playerStartPos = new Vector3(0, 0, 0);
+    public Vector3 playerStartPos = new Vector3(0, 1, 0);
 
 
     public float mapLimitX = 17f;
@@ -100,12 +100,14 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
+
+        uiManager = GameObject.Find("UI").GetComponent<UiManager>();
+        
         if (Application.isMobilePlatform)
         {
             Application.targetFrameRate = 30;
         }
-
-        uiManager = GameObject.Find("UI").GetComponent<UiManager>();
+             
         player = GameObject.Find("Player");
         if (player)
         {
@@ -143,6 +145,7 @@ public class GameManager : MonoBehaviour
                 }
             }
             
+            //Enable crocodile event
             if (timer < levelTimer / 2)
             {
                 if (crocodiles != null)
@@ -151,23 +154,20 @@ public class GameManager : MonoBehaviour
                 }
             }
 
+            //Enable power up event
             if (!powerUpPrefab.activeSelf)
             {
                 powerUpSpawnTimer -= Time.deltaTime;
             
-
                 if (powerUpSpawnTimer < 0)
                 {
                     float randomX = Random.Range(-mapLimitX, mapLimitX);
                     float randomY = Random.Range(-mapLimitY, mapLimitY);
-                    powerUpGO.transform.position = new Vector3(randomX, powerUpGO.transform.position.y,randomY);
+                    powerUpGO.transform.position = new Vector3(randomX, 1,randomY);
                     powerUpSpawnTimer = Random.Range(minPowerUpSpawnRate, maxPowerUpSpawnRate);
                     powerUpGO.SetActive(true);
                 }
             }
-
-
-            uiManager.EnableMobileControls(player.activeSelf);
         }
     }
 
@@ -208,6 +208,15 @@ public class GameManager : MonoBehaviour
 
     public void StartGame(int level)
     {
+        if (Application.isMobilePlatform)
+        {
+            uiManager.EnableMobileControls(true);
+        }
+        else
+        {
+            uiManager.EnableMobileControls(false);
+        }
+
         if (isPaused)
         {
             TogglePauseGame();
@@ -243,8 +252,6 @@ public class GameManager : MonoBehaviour
 
         if (player)
         {
-         
-
             player.transform.position = playerStartPos;
             player.SetActive(true);
         }
