@@ -31,16 +31,30 @@ public class GameManager : MonoBehaviour
 
     private UiManager uiManager;
 
-    public int frogCount = 5;
+   
+           
 
+    public int frogsToSpawn = 5;
+    public int beesToSpawn = 1;
+    public int maxBeesToSpawn = 5;
+    private float levelSpawnMultiplier = 1.5f;
+    private int frogsLeft = 0;
+    public int FrogsLeft
+    {
+        get { return frogsLeft; }
+    }
 
-    private List<GameObject> frogs;
+    private List<GameObject> frogsList;
+   
     public List<GameObject> crocodiles;
     public List<GameObject> bees;
 
     private GameObject player;
 
     public GameObject frogPrefab;
+    public GameObject beePrefab;
+    public GameObject crocodilePrefab;
+    public bool enableCrocodiles;
     public GameObject powerUpPrefab;
     public GameObject powerUpGO;
 
@@ -49,6 +63,10 @@ public class GameManager : MonoBehaviour
 
     public float levelTimer = 60f;
     private float timer;
+    public float Timer
+    {
+        get { return timer; }
+    }
 
     public Vector3 playerStartPos = new Vector3(0, 1, 0);
 
@@ -57,36 +75,41 @@ public class GameManager : MonoBehaviour
     public float mapLimitZ = 13f;
     public float mapLimitY = 20f;
 
+
     private int maxScore = 0;
+    public int MaxScore
+    {
+        get { return maxScore; }
+    }
 
     public float minPowerUpSpawnRate = 5f;
     public float maxPowerUpSpawnRate = 10f;
     private float powerUpSpawnTimer;
 
-    public int MaxScore
-    {
-        get { return maxScore; }
-    }
+    
    
-    public float Timer
-    {
-        get { return timer; }
-    }
+  
 
-    private bool gameOver;
+    private bool isGameOver;
     public bool IsGameOver
     {
-        get { return gameOver; }
+        get { return isGameOver; }
     }
 
     [HideInInspector]
     public int catchedFrogs = 0;
 
-    public int level = 1;
+    private int level = 1;
+    public int Level
+    {
+        get { return level; }
+    }
 
     public bool isPaused;
 
     private bool matchStarted;
+
+    public string gameOverCause = "Game Over";
 
     private void OnValidate()
     {
@@ -141,14 +164,14 @@ public class GameManager : MonoBehaviour
                 if (timer < 0)
                 {
                     timer = 0;
-                    GameOver();
+                    GameOver("Out of time!");
                 }
             }
             
             //Enable crocodile event
             if (timer < levelTimer / 2)
             {
-                if (crocodiles != null)
+                if (crocodiles != null && enableCrocodiles)
                 {
                     EnableEntities(crocodiles,true);
                 }
@@ -171,11 +194,11 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public GameObject InstantiateFrog(Vector3 spawnPos)
+    public GameObject InstantiateEntity(Vector3 spawnPos, GameObject prefab)
     {
-        GameObject frog = Instantiate(frogPrefab, spawnPos, frogPrefab.transform.rotation);
+        GameObject entity = Instantiate(prefab, spawnPos, prefab.transform.rotation);
 
-        return frog;
+        return entity;
     }
 
     private void CheckMaxScore()
@@ -190,38 +213,44 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void GameOver()
+    public void GameOver(string cause)
     {
-        if (!gameOver)
+        if (!isGameOver)
         {
             timer = 0;
-            Debug.Log("Game Over");
+            Debug.Log("Game Over by " + cause);
+            gameOverCause = cause;
             CheckMaxScore();
             
             player.SetActive(false);
             powerUpPrefab.SetActive(false);
-            gameOver = true;
+            isGameOver = true;
             matchStarted = false;
+
             uiManager.ToggleUI("GameOver", true);
         }
     }
 
+    public void WinEvent()
+    {
+        timer = 0;
+        player.SetActive(false);
+        isGameOver = false;
+        matchStarted = false;
+        uiManager.ToggleUI("GameOver", true);
+    }
+
+
     public void StartGame(int level)
     {
-        if (Application.isMobilePlatform)
-        {
-            uiManager.EnableMobileControls(true);
-        }
-        else
-        {
-            uiManager.EnableMobileControls(false);
-        }
 
+        uiManager.EnableMobileControls(Application.isMobilePlatform);
+        
         if (isPaused)
         {
             TogglePauseGame();
         }
-        gameOver = false;
+        isGameOver = false;
         Debug.Log($"Level {level} Start");
         if (uiManager)
         {
@@ -235,18 +264,14 @@ public class GameManager : MonoBehaviour
 
         catchedFrogs = 0;
 
-        frogs = GameObject.FindGameObjectsWithTag("Frog").ToList();
+        frogsList = GameObject.FindGameObjectsWithTag("Frog").ToList();
+        bees = GameObject.FindGameObjectsWithTag("Bee").ToList();
 
-        if (frogs.Count < frogCount)
-        {
-            while (frogs.Count < frogCount)
-            {
-                GameObject frog = InstantiateFrog(transform.position);
-                frogs.Add(frog);
-            }
+        SpawnEntities(frogsList,frogsToSpawn,frogPrefab);
+        SpawnEntities(bees,beesToSpawn,beePrefab);
+        SpawnEntities(crocodiles,1,crocodilePrefab);
 
-        }
-        EnableEntities(frogs,false);
+        EnableEntities(frogsList,false);
         EnableEntities(bees, false);
         EnableEntities(crocodiles, false);
 
@@ -257,12 +282,27 @@ public class GameManager : MonoBehaviour
         }
 
         EnableEntities(bees,true);
-        EnableEntities(frogs,true);
+        EnableEntities(frogsList,true);
 
+        frogsLeft = frogsList.Count;
 
         matchStarted = true;
     }
 
+    private void SpawnEntities(List<GameObject> entityList, int spawnCount, GameObject prefab)
+    {
+
+        if (entityList.Count < spawnCount)
+        {
+            while (entityList.Count < spawnCount)
+            {
+                Vector3 pos = new Vector3(transform.position.x,0,transform.position.z);
+                GameObject entity = InstantiateEntity(transform.position, prefab);
+                entityList.Add(entity);
+            }
+
+        }
+    }
 
     private void EnableEntities(List<GameObject> entities, bool active)
     {
@@ -280,6 +320,10 @@ public class GameManager : MonoBehaviour
 
     }
 
+    /// <summary>
+    /// returns a vector3 in a random point around the center of the map
+    /// </summary>
+    /// <returns></returns>
     private Vector3 RandomVector()
     {
         Vector3 spawnPosition = Vector3.zero;
@@ -303,15 +347,16 @@ public class GameManager : MonoBehaviour
     public void OpenMainMenu()
     {
         player.SetActive(false);
-        EnableEntities(frogs,false);
+        EnableEntities(frogsList,false);
         EnableEntities(crocodiles,false);
         EnableEntities(bees,false);
+
         uiManager.ToggleUI("MainMenu", true);
     }
 
     public void TogglePauseGame()
     {
-        if (!gameOver)
+        if (!isGameOver)
         {
             isPaused = !isPaused;
 
@@ -343,7 +388,37 @@ public class GameManager : MonoBehaviour
     private void OnDrawGizmosSelected()
     {
        Vector3 size = new Vector3(mapLimitX, mapLimitY, mapLimitZ)*2;
-        Gizmos.color = Color.yellow;
+        Gizmos.color = new Color(232f,253f,0f,0.22f);
         Gizmos.DrawCube(transform.position, size); 
+    }
+
+    public bool CheckOutOfTargets()
+    {
+        bool outOfTargets = true;
+        for (int i = 0; i < frogsList.Count; i++)
+        {
+            if (frogsList[i].activeSelf)
+            {
+                outOfTargets = false;
+            }
+        }
+        return outOfTargets;
+    }
+
+    
+
+    public void NextLevel()
+    {
+        if (CheckOutOfTargets())
+        {
+            level++;
+            frogsToSpawn = Mathf.RoundToInt(frogsToSpawn * levelSpawnMultiplier);
+            if (beesToSpawn < maxBeesToSpawn)
+            {
+                beesToSpawn++;
+            }
+            StartGame(level);
+
+        }
     }
 }

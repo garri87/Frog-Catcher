@@ -18,6 +18,21 @@ public class EntityBase : MonoBehaviour
         }
     }
 
+    protected Vector3 ClampToCameraView(Vector3 worldPos)
+    {
+        Camera activeCam = Camera.main;
+        Vector3 viewportPoint = activeCam.WorldToViewportPoint(worldPos);
+
+        viewportPoint.x = Mathf.Clamp01(viewportPoint.x);
+        viewportPoint.y = Mathf.Clamp01(viewportPoint.y);
+
+        Vector3 clampedWorldPos = activeCam.ViewportToWorldPoint(viewportPoint);
+
+        clampedWorldPos.y = transform.position.y;
+
+        return clampedWorldPos;
+    }
+
     protected void SetPatrolPoint(NavMeshAgent navMesh, float maxX, float maxZ )
     {
 

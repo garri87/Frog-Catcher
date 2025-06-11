@@ -19,16 +19,20 @@
     text-shadow: 0.9px 1.1px 0.5px rgba(0, 0, 0, 0.6);
     background-image: resource('Textures/wood');
     -unity-background-image-tint-color: rgb(207, 193, 95);
-    border-left-width: 11px;
-    border-right-width: 11px;
-    border-top-width: 11px;
-    border-bottom-width: 11px;
-    height: 100%;
+    border-left-width: 2px;
+    border-right-width: 2px;
+    border-top-width: 2px;
+    border-bottom-width: 2px;
     margin-left: 5px;
     margin-right: 5px;
     margin-top: 5px;
     margin-bottom: 5px;
-    font-size: 200%;
+    max-width: 200px;
+    max-height: 50px;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 5px;
+    padding-bottom: 5px;
 }
 
 .tutorialGroup {
@@ -36,8 +40,13 @@
     justify-content: center;
     align-items: center;
     flex-grow: 1;
-    flex-shrink: 0;
+    flex-shrink: 1;
     max-height: 50%;
+    max-width: 80%;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 .tutorialGroup VisualElement {
@@ -53,6 +62,7 @@
     flex-grow: 1;
     height: 100%;
     width: 100%;
+    -unity-background-scale-mode: scale-to-fit;
 }
 
 .tutorialGroup Label {
@@ -64,7 +74,63 @@
     -unity-text-align: middle-center;
     white-space: normal;
     align-items: stretch;
-    height: 100%;
-    width: 100%;
-    font-size: 200%;
+    font-size: 100%;
+    flex-grow: 1;
+}
+
+.boxSmall {
+    flex-grow: 0;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    opacity: 0.9;
+    max-width: 120px;
+    max-height: 100px;
+    width: 100px;
+    height: 50px;
+    -unity-font-definition: initial;
+}
+
+.boxSmall Label {
+    opacity: 0.8;
+    flex-grow: 1;
+    max-width: 100px;
+    max-height: 100px;
+    color: rgb(255, 255, 255);
+    -unity-text-outline-width: 1px;
+    -unity-text-align: middle-center;
+    font-size: 150%;
+    -unity-font: resource('Fonts/Coffee Soda/Coffee Soda');
+    -unity-font-definition: initial;
+    flex-shrink: 1;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.MainTitleLabel {
+    -unity-font-definition: initial;
+    -unity-font: resource('Fonts/Coffee Soda/Coffee Soda');
+    -unity-text-align: middle-center;
+    flex-grow: 1;
+    flex-shrink: 1;
+    color: rgb(55, 171, 36);
+    -unity-text-outline-width: 1px;
+    -unity-text-outline-color: rgb(0, 0, 0);
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    font-size: 100%;
+    -unity-font-style: normal;
+    white-space: normal;
 }

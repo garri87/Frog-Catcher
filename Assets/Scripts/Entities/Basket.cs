@@ -36,11 +36,19 @@ public class Basket : MonoBehaviour
      
     }
 
+    /// <summary>
+    /// Executes the catch procedure, disabling the target gameobject,plays the catch particle and add +1 to counter
+    /// </summary>
+    /// <param name="target"></param>
     private void CatchEvent(GameObject target)
     {
         target.SetActive(false);
         particle.Play();
         gameManager.catchedFrogs += 1;
+        if (gameManager.CheckOutOfTargets())
+        {
+            gameManager.WinEvent();
+        }
     }
 
 

@@ -296,12 +296,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dffcb80761f1c304f8100ff11f7d5ad1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  jumpForce: 20
+  jumpForce: 10
   jumpAngle: 80
-  jumpHeight: 20
+  jumpHeight: 30
   maxJumpInterval: 5
   turnSpeed: 500
   canJump: 0
+  catchable: 0
   frogCollision: 0
   playerCollision: 0
 --- !u!114 &2172451113444736561

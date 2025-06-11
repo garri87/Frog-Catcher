@@ -24,7 +24,7 @@ public class TutorialUI : MonoBehaviour
     {
         startButton = root.Q<Button>("StartButton");
 
-        startButton.RegisterCallback<ClickEvent>(evt => gameManager.StartGame(gameManager.level));
+        startButton.RegisterCallback<ClickEvent>(evt => gameManager.StartGame(gameManager.Level));
     }
 
 }

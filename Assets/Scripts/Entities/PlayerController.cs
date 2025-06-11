@@ -110,6 +110,8 @@ public class PlayerController : EntityBase
         horizontalInput = playerControls.PlayerActions.Movement.ReadValue<Vector2>().x;
         verticalInput = playerControls.PlayerActions.Movement.ReadValue<Vector2>().y;
 
+       
+
         moveDirection = new Vector3(horizontalInput, 0, verticalInput);
 
         if (moveDirection != Vector3.zero)
@@ -122,7 +124,11 @@ public class PlayerController : EntityBase
 
         _rigidbody.MovePosition(_rigidbody.position + movement);
 
-        LimitBounds(transform, gameManager.mapLimitX, gameManager.mapLimitY, gameManager.mapLimitZ);
+        Vector3 velocity = new Vector3(horizontalInput, 0, verticalInput) * maxMovementSpeed * Time.deltaTime;
+        Vector3 newPosition = transform.position + velocity;
+        transform.position = ClampToCameraView(newPosition);
+
+        //LimitBounds(transform, gameManager.mapLimitX, gameManager.mapLimitY, gameManager.mapLimitZ);
 
     }
 
@@ -195,7 +201,7 @@ public class PlayerController : EntityBase
 
         if (collision.gameObject.CompareTag("Crocodile"))
         {
-            gameManager.GameOver();
+            gameManager.GameOver("Eaten by Crocodile");
         }
 
         
@@ -231,7 +237,7 @@ public class PlayerController : EntityBase
             GameObject player = GameObject.Find("Player");
             for (int i = 0; i < Mathf.RoundToInt(result); i++)
             {
-                gameManager.InstantiateFrog(player.transform.position);
+                gameManager.InstantiateEntity(player.transform.position,gameManager.frogPrefab);
             }
             Debug.Log("Losed frogs, total: " + gameManager.catchedFrogs);
             Debug.Log("Result: " + result);

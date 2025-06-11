@@ -9,6 +9,8 @@ public class InGameOverlayUI : MonoBehaviour
     
     private Label timerLabel;
 
+    private Label currentLevelLabel;
+
     private Button pauseButton;
 
     private GameManager _gameManager;
@@ -28,6 +30,7 @@ public class InGameOverlayUI : MonoBehaviour
         frogCountLabel = root.Q<Label>("FrogCount");
         timerLabel = root.Q<Label>("Timer");
         pauseButton = root.Q<Button>("PauseButton");
+        currentLevelLabel = root.Q<Label>("CurrentLevel");
 
         frogCountLabel.text = catchedFrogs.ToString();
 
@@ -45,7 +48,10 @@ public class InGameOverlayUI : MonoBehaviour
         timerLabel.text = formattedTime;
 
         catchedFrogs = _gameManager.catchedFrogs;
-        frogCountLabel.text = catchedFrogs.ToString();
+        
+        frogCountLabel.text = catchedFrogs.ToString() + "/" + _gameManager.FrogsLeft.ToString();
+
+        currentLevelLabel.text = "Level: " + _gameManager.Level; 
 
     }
 }

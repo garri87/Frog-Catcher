@@ -5,8 +5,9 @@ public class GameOverUI : MonoBehaviour
 {
     private UIDocument _uiDocument;
 
-    private Label _textLabel;
+    private Label _titleLabel;
     public Label _infoTextLabel;
+
 
     private Button _retryButton;
     private Button _mainMenuButton;
@@ -24,7 +25,7 @@ public class GameOverUI : MonoBehaviour
         _uiDocument= GetComponent<UIDocument>();
         VisualElement root = _uiDocument.rootVisualElement;
 
-        _textLabel = root.Query<Label>("Text");
+        _titleLabel = root.Query<Label>("Text");
         _retryButton = root.Q<Button>("RetryButton");
         _mainMenuButton = root.Q<Button>("MainMenuButton");
         _exitButton = root.Q<Button>("ExitButton");
@@ -36,13 +37,13 @@ public class GameOverUI : MonoBehaviour
         {
             _retryButton.text = "Retry";
             _retryButton.UnregisterCallback<ClickEvent>(evt => gameManager.TogglePauseGame());
-            _retryButton.RegisterCallback<ClickEvent>(evt => gameManager.StartGame(gameManager.level));
+            _retryButton.RegisterCallback<ClickEvent>(evt => gameManager.StartGame(gameManager.Level));
         }
         else
         {
-            _retryButton.text = "Continue";
-            _retryButton.UnregisterCallback<ClickEvent>(evt => gameManager.StartGame(gameManager.level));
-            _retryButton.RegisterCallback<ClickEvent>(evt => gameManager.TogglePauseGame());
+            _retryButton.text = "Next Level";
+            _retryButton.UnregisterCallback<ClickEvent>(evt => gameManager.TogglePauseGame());
+            _retryButton.RegisterCallback<ClickEvent>(evt => gameManager.NextLevel());
         }
         _mainMenuButton.RegisterCallback<ClickEvent>(evt => gameManager.OpenMainMenu());
         _exitButton.RegisterCallback<ClickEvent>(evt => gameManager.QuitGame());
@@ -55,15 +56,15 @@ public class GameOverUI : MonoBehaviour
         
         if (gameManager.isPaused)
         {
-            _textLabel.text = "Paused";
+            _titleLabel.text = "Paused";
         }
         else
         {
-            _textLabel.text = "Game Over";
+          _titleLabel.text = (gameManager.IsGameOver) ? gameManager.gameOverCause : "Level Complete";      
         }
         _infoTextLabel.text = $"Captured Frogs:{gameManager.catchedFrogs}";
 
     }
 
- 
+   
 }

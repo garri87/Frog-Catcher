@@ -1,7 +1,7 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/UI/Styles/main.uss?fileID=7433441132597879392&amp;guid=8e37d066f00d5b44b8d4fcdade00028e&amp;type=3#main" />
     <ui:VisualElement name="Root" style="flex-grow: 1; align-items: center; justify-content: center;">
-        <ui:VisualElement name="Frame" style="background-color: rgba(101, 101, 101, 0.5); border-top-left-radius: 5%; border-bottom-left-radius: 5%; border-top-right-radius: 5%; border-bottom-right-radius: 5%; padding-left: 1%; padding-right: 1%; padding-top: 1%; padding-bottom: 1%; flex-grow: 1; align-items: center; width: 80%; max-height: 80%; max-width: 80%;">
+        <ui:VisualElement name="Frame" style="background-color: rgba(101, 101, 101, 0.5); border-top-left-radius: 5%; border-bottom-left-radius: 5%; border-top-right-radius: 5%; border-bottom-right-radius: 5%; padding-left: 1%; padding-right: 1%; padding-top: 1%; padding-bottom: 1%; flex-grow: 1; align-items: center; width: 80%; max-height: 80%; max-width: 80%; height: 80%;">
             <ui:VisualElement name="Group1" class="tutorialGroup">
                 <ui:VisualElement style="background-image: resource(&apos;Textures/FrogIcon&apos;); -unity-background-scale-mode: scale-to-fit;" />
                 <ui:Label text="Catch many frogs as you can in the basket" display-tooltip-when-elided="true" />

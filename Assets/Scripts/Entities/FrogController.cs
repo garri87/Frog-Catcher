@@ -53,10 +53,15 @@ public class FrogController : EntityBase
 
     private void FixedUpdate()
     {
-        LimitBounds(transform,gameManager.mapLimitX,gameManager.mapLimitY,gameManager.mapLimitZ);
+        //LimitBounds(transform,gameManager.mapLimitX,gameManager.mapLimitY,gameManager.mapLimitZ);
+
+        Vector3 velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z) * Time.deltaTime;
+
+        Vector3 newPosition = transform.position + velocity;
+        transform.position = ClampToCameraView(newPosition);
 
         //Limit rigidbody Y velocity if is out of bounds
-        if(transform.position.y >= gameManager.mapLimitY)
+        if (transform.position.y >= gameManager.mapLimitY)
         {
             rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
         }
@@ -95,7 +100,7 @@ public class FrogController : EntityBase
     {
         float angleInRad = jumpAngle * Mathf.Deg2Rad;
 
-        float randomRot = Random.Range(0f, 360f);
+        float randomRot = Random.Range(0.001f, 360f);
             
         jumpDirection = Quaternion.Euler(0, randomRot, 0) * Vector3.forward;
 
@@ -103,6 +108,12 @@ public class FrogController : EntityBase
                                          Mathf.Sin(angleInRad), jumpDirection.z * Mathf.Cos(angleInRad)) * jumpForce;
 
         rb.AddForce(jumpVector, ForceMode.Impulse);
+
+        if (rb.velocity.y > jumpForce)
+        {
+
+            rb.velocity = new Vector3(rb.velocity.x,jumpForce,rb.velocity.z);
+        }
 
         canJump = false;
         jumpInterval = Random.Range(1, maxJumpInterval);

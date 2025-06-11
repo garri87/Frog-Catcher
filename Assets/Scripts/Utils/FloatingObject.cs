@@ -11,7 +11,7 @@ public class FloatingObject : MonoBehaviour
 
     private void OnEnable()
     {
-        yPos = transform.position.y;
+        yPos = 1;
 
     }
     private void Update()
